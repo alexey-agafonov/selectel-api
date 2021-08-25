@@ -20,7 +20,7 @@ def create_app(config_name: str) -> Flask:
 
     app.config['SWAGGER'] = {
         'title': 'Selectel Upload API',
-        'uiversion': 2,
+        'uiversion': 3,
         'specs_route': '/docs/'
     }
     Swagger(app, template_file='../docs/swagger.yml', parse=True)

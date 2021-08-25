@@ -1,0 +1,78 @@
+---
+swagger: '2.0'
+info:
+  title: Selectel Upload Public API
+  description: Welcome to the public API developed by Alex Agafonov
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: aleks.xploid@gmail.com
+  license:
+    name: Apache 2.0 License
+  version: v1
+
+host: api.agafonov.dev
+basePath: /v1/
+schemes:
+  - https
+consumes:
+  - multipart/form-data
+produces:
+  - application/json
+
+securityDefinitions:
+  ApiKeyAuth:
+    type: Token
+    in: header
+    name: X-Auth-Token
+
+paths:
+  /files/:
+    get:
+      operationId: 'Получение списка загруженных пользовательских файлов'
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: 'Возвращён список пользовательских файлов'
+          application/json:
+            schema:
+              type: array
+            example: [ file1.xml, file2.mkv, file3.mp3 ]
+        '204':
+          description: 'Запрос завершился без ошибок, но возвращаемые данные отсутствуют'
+        '401':
+          description: 'Предоставлен невалидный токен'
+        '404':
+          description: 'Запрашиваемая информация не найдена'
+        '500':
+          description: 'При обработке запроса произошла ошибка на стороне сервера'
+  /files/{filename}:
+    delete:
+      operationId: 'Удаление ранее загруженного пользовательского файла'
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '204':
+          description: 'Удаление файла из контейнера успешно произведено'
+        '401':
+          description: 'Предоставлен невалидный токен'
+        '404':
+          description: 'Запрашиваемый для удаление файл не найден'
+        '500':
+          description: 'При обработке запроса произошла ошибка на стороне сервера'
+  /upload/:
+    put:
+      operationId: 'Сохранение файла в облачном хранилище в контейнере пользователя'
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '201':
+          description: 'Файл $filename успешно сохранён'
+        '400':
+          description: 'Получена неверная информация от пользователя. Отсутствует файл или имя у файла'
+        '401':
+          description: 'Предоставлен невалидный токен'
+        '404':
+          description: 'Запрашиваемая информация не найдена'
+        '500':
+          description: 'При обработке запроса произошла ошибка на стороне сервера'
