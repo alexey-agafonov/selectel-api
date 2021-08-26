@@ -57,7 +57,7 @@ class CloudStorage:
 
         try:
             response = requests.put(f'{self.API_URL}/v1/SEL_{self.__user_id}/{user_id}/',
-                                       headers=headers)
+                                    headers=headers)
         except requests.exceptions.RequestException:
             return 'Can\'t request your data. Try again later.', 500
 

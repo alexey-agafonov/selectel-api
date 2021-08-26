@@ -46,7 +46,6 @@ class UploadFile(Resource):
 
         try:
             token: str = request.headers.get('X-Auth-Token')
-            Path(f'uploads/{token}').mkdir(parents=True, exist_ok=True)
 
             chunk_size: int = 16192 * 1024
             part: int = 1
@@ -57,11 +56,13 @@ class UploadFile(Resource):
                 if filename == '':
                     return abort(400, 'Files must have a name.')
 
+                Path(f'uploads/{token}/{filename[:255]}').mkdir(parents=True, exist_ok=True)
+
                 if len(chunk) == 0:
                     self.logger.info(f'{filename=} all chunks has written to the disk.')
                     break
-                self.logger.info(os.getenv("UPLOAD_FOLDER"))
-                with open(f'uploads/{token}/{filename[:240]}_part{part}', 'bw') as f:
+
+                with open(f'uploads/{token}/{filename[:255]}/{part}', 'bw') as f:
                     self.logger.info(f'{filename=} part {part} has written to the disk.')
                     f.write(chunk)
 
